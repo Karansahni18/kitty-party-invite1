@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kitty Party Invite - Sheetal Sahni</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #ffeaa7, #f6e58d);
+      color: #4d3300;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .invitation-card {
+      max-width: 600px;
+      margin: auto;
+      background: #fff8e1;
+      border: 5px solid #f9ca24;
+      border-radius: 25px;
+      padding: 30px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #e17055;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin: 10px 0;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-style: italic;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti-canvas"></canvas>
+  
+  <div class="invitation-card">
+    <h1>🎉 You're Invited! 🎉</h1>
+    <h2>Kitty Party Hosted by <br><strong>Sheetal Sahni</strong></h2>
+    <p>
+      Get ready for an afternoon full of laughter, delicious food, and delightful gossip!<br><br>
+      🗓️ <strong>Date:</strong> [Insert Date]<br>
+      🕒 <strong>Time:</strong> [Insert Time]<br>
+      📍 <strong>Venue:</strong> [Insert Address]<br>
+      👗 <strong>Dress Code:</strong> Bright & Cheerful 🌼
+    </p>
+    <p class="footer">
+      We can't wait to have you over!<br>
+      – With Love, Sheetal ❤️
+    </p>
+  </div>
+
+  <script>
+    // Basic Confetti
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let W = window.innerWidth;
+    let H = window.innerHeight;
+    canvas.width = W;
+    canvas.height = H;
+
+    const particles = [];
+    const particleCount = 150;
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 6 + 4,
+        d: Math.random() * particleCount,
+        color:
+          "hsl(" + Math.floor(Math.random() * 360) + ", 70%, 60%)",
+        tilt: Math.floor(Math.random() * 10) - 10,
+        tiltAngleIncremental: (Math.random() * 0.07) + 0.05,
+        tiltAngle: 0
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      for (let i = 0; i < particleCount; i++) {
+        let p = particles[i];
+        ctx.beginPath();
+        ctx.lineWidth = p.r;
+        ctx.strokeStyle = p.color;
+        ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+        ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+        ctx.stroke();
+      }
+      update();
+    }
+
+    function update() {
+      for (let i = 0; i < particleCount; i++) {
+        let p = particles[i];
+        p.tiltAngle += p.tiltAngleIncremental;
+        p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+        p.x += Math.sin(p.d);
+        p.tilt = Math.sin(p.tiltAngle - i / 3) * 15;
+
+        if (p.y > H) {
+          p.y = -10;
+          p.x = Math.random() * W;
+        }
+      }
+    }
+
+    setInterval(draw, 30);
+    window.addEventListener('resize', () => {
+      W = window.innerWidth;
+      H = window.innerHeight;
+      canvas.width = W;
+      canvas.height = H;
+    });
+  </script>
+</body>
+</html>
